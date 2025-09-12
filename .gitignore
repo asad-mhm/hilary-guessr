@@ -1,0 +1,27 @@
+# Node (frontend)
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.DS_Store
+
+# Python (backend)
+backend/__pycache__/
+backend/.env
+backend/.DS_Store
+
+# macOS
+.DS_Store
+
+# VSCode
+.vscode/
+
+# Python virtual environments
+venv/
+env/
+*.pyc
+
+# Logs
+*.log
+
+# OS junk
+Thumbs.db
