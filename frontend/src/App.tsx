@@ -1,21 +1,18 @@
 // filepath: [App.tsx](http://_vscodecontentref_/1)
 import React, { useState, useEffect } from "react";
+
 import { GuessInput } from "./components/GuessInput";
+import { WordClues, CharacterClue } from "./components/WordClues";
 
-type CharacterClue = {
-  character: string;
-  translation: string;
-};
-
-type GuessRecord = {
+interface GuessRecord {
   guess: string;
   score: number;
   correct: boolean;
-};
+}
 
-const BACKEND_URL = "http://localhost:8000";
+const BACKEND_URL = "http://localhost:8000"; // Adjust as needed
 
-function App() {
+export default function App() {
   const [clues, setClues] = useState<CharacterClue[]>([]);
   const [guesses, setGuesses] = useState<GuessRecord[]>([]);
   const [feedback, setFeedback] = useState("");
@@ -44,38 +41,28 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 to-blue-300">
-      <h1 className="text-3xl font-bold mb-6">Hilary Guessr</h1>
-      <div className="mb-6 flex flex-col items-center">
-        <div className="flex space-x-4 text-5xl font-semibold mb-2">
-          {clues.map((clue, idx) => (
-            <span key={idx}>{clue.character}</span>
-          ))}
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 via-blue-100 to-yellow-100 transition-colors duration-700">
+      <div className="w-full max-w-md mx-auto bg-white/90 rounded-2xl shadow-2xl p-8 flex flex-col items-center gap-8 border border-gray-200">
+        <h1 className="text-4xl font-extrabold tracking-tight text-gray-800 text-center drop-shadow mb-2 select-none font-[Inter]">Hilary Guessr</h1>
+        <WordClues clues={clues} />
+        <div className="w-full flex flex-col gap-4">
+          <ul className="mb-2">
+            {guesses.map((g, idx) => (
+              <li key={idx} className="flex justify-between items-center py-1 text-lg">
+                <span className={g.correct ? "text-green-700 font-bold" : ""}>{g.guess}</span>
+                <span className="ml-2 text-blue-700">Score: {g.score}</span>
+              </li>
+            ))}
+          </ul>
+          {!guessed && <GuessInput onGuess={handleGuess} feedback={feedback} />}
+          {guessed && (
+            <div className="mt-4 text-green-700 text-2xl animate-bounce">
+              🎉 Congratulations!
+            </div>
+          )}
         </div>
-        <div className="flex space-x-4 text-lg text-gray-700">
-          {clues.map((clue, idx) => (
-            <span key={idx}>{clue.translation}</span>
-          ))}
-        </div>
-      </div>
-      <div className="w-full max-w-md">
-        <ul className="mb-4">
-          {guesses.map((g, idx) => (
-            <li key={idx} className="flex justify-between items-center py-1">
-              <span>{g.guess}</span>
-              <span className="ml-2 text-blue-700">Score: {g.score}</span>
-            </li>
-          ))}
-        </ul>
-        {!guessed && <GuessInput onGuess={handleGuess} feedback={feedback} />}
-        {guessed && (
-          <div className="mt-4 text-green-700 text-2xl">
-            🎉 Congratulations!
-          </div>
-        )}
+        <footer className="mt-6 text-xs text-gray-400 text-center select-none">Inspired by Wordle</footer>
       </div>
     </div>
   );
 }
-
-export default App;
